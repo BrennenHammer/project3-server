@@ -27,19 +27,57 @@ const userSchema = new Schema(
     bio: {
         type: String,
     },
-    followers: [{
+    subscribers: [{
         type: Schema.Types.ObjectId,
         ref: 'User'
     }],
+    suscribersCount: {
+        type: Number,
+        default: 0
+    },
     following: [{
         type: Schema.Types.ObjectId,
         ref: 'User'
     }],
+    followingCount: {
+        type: Number,
+        default: 0
+    },
     posts: [{type: Schema.Types.ObjectId, ref: 'Post'}]
   },
   {
     timestamps: true,
   }
 );
+
+userSchema.methods.subscribeTo = function(userId) {
+    if (!this.following.includes(userId)) {
+        this.following.push(userId);
+        this.followingCount++;
+    }
+};
+
+userSchema.methods.unsubscribeFrom = function(userId) {
+    const index = this.following.indexOf(userId);
+    if (index !== -1) {
+        this.following.splice(index, 1);
+        this.followingCount--;
+    }
+};
+
+userSchema.methods.addSubscriber = function(userId) {
+    if (!this.subscribers.includes(userId)) {
+        this.subscribers.push(userId);
+        this.subscribersCount++;
+    }
+};
+
+userSchema.methods.removeSubscriber = function(userId) {
+    const index = this.subscribers.indexOf(userId);
+    if (index !== -1) {
+        this.subscribers.splice(index, 1);
+        this.subscribersCount--;
+    }
+};
 
 module.exports = model("User", userSchema);

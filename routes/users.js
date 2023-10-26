@@ -26,15 +26,15 @@ router.get('/detail/:userId', (req, res, next) => {
   const userId = req.params.userId;
 
   User.findById(userId)
-  .populate('followers following posts')
+  .populate('subscribers following posts')
     .then((foundUser) => {
       Post.find({author: userId})
         .then((foundPosts) => {
 
 
-          const { _id, email, username , profilePicture, bio, followers, following } = foundUser;
+          const { _id, email, username , profilePicture, bio, subscribers, following } = foundUser;
     
-          const userInfo = { _id, email, username , profilePicture, bio, followers, following, posts: foundPosts };
+          const userInfo = { _id, email, username , profilePicture, bio, subscribers, following, posts: foundPosts };
           res.json(userInfo)
 
 
