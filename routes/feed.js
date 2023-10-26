@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Post = require('../models/Post');
-
+const isAuthenticated = require('../middleware/isAuthenticated')
 router.get('/', (req, res) => {
     Post.find()
+        .populate('author')
         .then(posts => {
             res.status(200).json(posts);
         })
@@ -13,15 +14,16 @@ router.get('/', (req, res) => {
         });
 });
 
-router.post('/', (req, res) => {
-    const { user, description, imageUrl } = req.body;
-
+router.post('/', isAuthenticated, (req, res) => {
+    const { description, file } = req.body;
+    console.log('this is body', req.body)
+    const userId = req.user._id;
     const mediaType = 'photo'; // assuming everything is a photo
 
     const newPost = new Post({
-        author: user,            
+        author: userId,            
         mediaType: mediaType,     
-        mediaUrl: imageUrl,       
+        mediaUrl: file,       
         caption: description      
     });
 

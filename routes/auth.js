@@ -58,7 +58,7 @@ router.post("/login", (req, res, next) => {
     return;
   }
   User.findOne({ email })
-   
+   .populate('followers following posts')
     .then((foundUser) => {
       if (!foundUser) {
         res.status(401).json({ message: "User not found." });
@@ -67,9 +67,10 @@ router.post("/login", (req, res, next) => {
       const passwordCorrect = bcrypt.compareSync(password, foundUser.password);
 
       if (passwordCorrect) {
-        const { _id, email, name , pets, location, image } = foundUser;
 
-        const payload = { _id, email, name, pets, location, image };
+        const { _id, email, username , profilePicture, bio, followers, following, posts } = foundUser;
+
+        const payload = { _id, email, username , profilePicture, bio, followers, following, posts };
         const authToken = jwt.sign(payload, process.env.SECRET, {
           algorithm: "HS256",
           expiresIn: "6h",

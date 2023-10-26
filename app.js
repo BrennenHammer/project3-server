@@ -9,9 +9,11 @@ var cors = require('cors')
 var userRouter = require('./routes/users');
 var authRouter = require("./routes/auth")
 var addpostsRouter = require('./routes/addposts')
-var subscribersRoute = require('./routes/subscibers')
+var subscribersRoute = require('./routes/subscribers')
 var feedRouter = require('./routes/feed')
-
+var photoRouter = require('./routes/photo')
+var profileRouter = require('./routes/profile');
+var userprofileRouter = require('./routes/userprofile')
 var app = express();
 
 app.use(logger('dev'));
@@ -38,10 +40,11 @@ app.use(
 app.use('/users', userRouter);
 app.use('/addposts', addpostsRouter);
 app.use('/auth', authRouter);
-app.use('/subscribers', subscribersRoute)
+app.use('/subscribers', subscribersRoute);
 app.use('/feed', feedRouter);
-
-
+app.use('/photo', photoRouter);
+app.use('/profile', profileRouter);
+app.use('/userprofile', userprofileRouter)
 
 mongoose
   .connect(process.env.MONGODB_URI)
