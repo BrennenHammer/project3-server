@@ -8,7 +8,7 @@ var cors = require('cors')
 
 var userRouter = require('./routes/users');
 var authRouter = require("./routes/auth")
-var addpostsRouter = require('./routes/addposts')
+// var addpostsRouter = require('./routes/addposts')
 var subscribersRoute = require('./routes/subscribers')
 var feedRouter = require('./routes/feed')
 var photoRouter = require('./routes/photo')
@@ -38,7 +38,7 @@ app.use(
 //   );
 
 app.use('/users', userRouter);
-app.use('/addposts', addpostsRouter);
+// app.use('/addposts', addpostsRouter);
 app.use('/auth', authRouter);
 app.use('/subscribers', subscribersRoute);
 app.use('/feed', feedRouter);
