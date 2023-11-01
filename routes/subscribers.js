@@ -2,8 +2,9 @@ var express = require('express');
 var router = express.Router();
 const Subscriber = require('../models/Subscribers');
 const User = require('../models/User');
+const isAuthenticated = require('../middleware/isAuthenticated');
 
-router.get('/:userId', async (req, res) => {
+router.get('/:userId', isAuthenticated, async (req, res) => {
     const userId = req.params.userId;
     
     try {
@@ -31,9 +32,15 @@ router.post('/subscribe/:userIdToSubscribeTo', async (req, res) => {
         const subscribingUser = await User.findById(subscriberId);
         const userBeingSubscribedTo = await User.findById(userIdToSubscribeTo);
 
+        console.log("Subscrbing user", subscribingUser)
+        console.log("subscribing to", userBeingSubscribedTo)
       
-        subscribingUser.subscribeTo(userIdToSubscribeTo);
-        userBeingSubscribedTo.addSubscriber(subscriberId);
+        let followingArray = [...subscribingUser.following, userIdToSubscribeTo]
+        let followersArray = [...userBeingSubscribedTo.subscribers, subscriberId]
+        subscribingUser.following = followingArray
+        userBeingSubscribedTo.subscribers = followersArray
+        subscribingUser.followingCount += 1
+        userBeingSubscribedTo.suscribersCount += 1
 
        
         await subscribingUser.save();

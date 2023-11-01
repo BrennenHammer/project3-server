@@ -33,6 +33,18 @@ const postSchema = new Schema({
     location: String,
     tags: [String]
 });
+postSchema.methods.like = function(userId) {
+
+    if (!this.likes.includes(userId)) {
+        this.likes.push(userId);
+    }
+};
+postSchema.methods.unlike = function(userId) {
+    const index = this.likes.indexOf(userId);
+    if (index !== -1) {
+        this.likes.splice(index, 1);
+    }
+};
 
 const Post = mongoose.model('Post', postSchema);
 
